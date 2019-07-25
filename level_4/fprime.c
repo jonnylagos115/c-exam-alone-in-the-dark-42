@@ -5,66 +5,69 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlagos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/09 14:22:45 by jlagos            #+#    #+#             */
-/*   Updated: 2019/03/12 14:09:32 by jlagos           ###   ########.fr       */
+/*   Created: 2019/07/24 13:23:48 by jlagos            #+#    #+#             */
+/*   Updated: 2019/07/24 17:15:07 by jlagos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <printf.h>
 #include <stdlib.h>
 
-void	print_star_or_not(int div, int i, int num)
+int		is_prime_nbr(int nbr)
 {
-	if (div == num)
-		printf("%d", i);
-	else
-		printf("*%d", i);
-}
+	int	odd_nbr;
 
-void	print_primes(unsigned int num)
-{
-	unsigned int 	i;
-	unsigned int 	div;
-	int				primes;
-	int				f_prime;
-
-	i = 5;
-	primes = 2;
-	div = num;
-	f_prime = 2;
-	while (!(div % f_prime) || f_prime == 2)
-	{
-		if (div % f_prime && f_prime == 2)
-			f_prime++;
-		else
-		{
-			print_star_or_not(div, f_prime, num);
-			div /= f_prime;
-		}
-	}
-	while (i * i <= num || div >= i)
-	{
-		if (!(div % i) || div == i)
-		{
-			print_star_or_not(div, i, num);
-			div /= i;
-		}
-		else
-		{
-			i += primes;
-			primes = 6 - primes;
-		}
-	}
+	odd_nbr = 2;
+	if (!(nbr % 2))
+		return (1);
+	while (nbr > ++odd_nbr)
+		if (!(nbr % odd_nbr))
+			return (1);
+	return (0);
 }
 
 int		main(int ac, char **ag)
 {
 	if (ac == 2)
 	{
-		int num;
+		int		num;
+		int		product;
+		int		prime;
 
 		num = atoi(ag[1]);
-		print_primes(num);
+		product = 1;
+		prime = 2;
+		if (is_prime_nbr(num))
+		{
+			while (num && num != 1)
+			{
+				if (!(num % prime))
+				{
+					printf("%d*", prime);
+					product *= prime;
+					num = num / prime;
+				}
+				else
+				{
+					if (prime != 2)
+					{
+						prime += 2;
+						while (is_prime_nbr(prime))
+							prime += 2;
+					}
+					else
+						prime++;
+				}
+				if (!is_prime_nbr(num))
+				{
+					printf("%d", num);
+					num = 0;
+				}
+			}
+			
+		}
+		else
+			printf("%d", num);
 	}
 	printf("\n");
 	return (0);
